@@ -1,47 +1,48 @@
-# ⚡️ Asynchronous Production-Ready Crypto Telegram Bot Engine
+# ⚡️ Asynchronous Crypto Telegram Bot Engine
 
-A high-performance, asynchronous **Telegram Bot** engineered with **C# (.NET 8)** and integrated with the official **Binance API** to deliver real-time macroeconomic cryptographic market data. Architected utilizing clean code principles, custom runtime command routing, and zero-allocation string parsing.
-
----
-
-## 🛠️ TECH STACK & INFRASTRUCTURE
-*   **Core Engine:** `Microsoft .NET 8.0 Runtime` (Asynchronous C# Baseline)
-*   **API Wrapper:** `Telegram.Bot Framework` (Non-blocking long-polling orchestration)
-*   **External Integration:** `Binance REST API v3` (High-frequency ticker sockets)
-*   **Containerization:** `Docker` (Multi-stage lightweight execution environments)
-*   **Operating System:** `Arch Linux` (Development & profiling baseline)
+A high-performance, asynchronous Telegram Bot engineered with C# (.NET 8) and integrated with the Binance REST API v3 to deliver real-time cryptographic market data. The system is architected utilizing Clean Code principles, the Strategy Pattern for command routing, and optimized connection pooling.
 
 ---
 
-## 🏗️ ADVANCED ARCHITECTURAL OVERVIEW
+## 🛠️ Tech Stack & Infrastructure
 
-This bot engine avoids messy "monolithic if-else chains" or beginner-level string parsing. It utilizes an advanced architectural pipeline to route commands dynamically:
+*   **Core Engine:** Microsoft .NET 8.0 SDK (ASP.NET Core Worker Service)
+*   **API Wrapper:** Telegram.Bot Framework (Asynchronous long-polling orchestration)
+*   **External Integration:** Binance REST API v3 (Market data endpoints)
+*   **Containerization:** Docker (Multi-stage lightweight execution environments)
+
+---
+
+## 🏗️ Architectural Overview
+
+The application completely avoids monolithic if-else chains, utilizing an extensible polymorphic pipeline to route commands dynamically:
 
 ### 1. Unified Update Handler (`UpdateHandler.cs`)
 *   Intercepts incoming network updates from the Telegram Bot API.
-*   Dynamically normalizes input vectors, differentiating standard slash commands (`/start`) from structural custom reply-keyboard payloads without pipeline latency.
+*   Abstracts and normalizes input vectors, processing standard slash commands and custom reply-keyboard payloads through a unified interface.
 
 ### 2. Polymorphic Command Router (`CommandRouter.cs`)
-*   Implements a clean **Strategy Pattern** for decoupled scalability.
-*   Utilizes a dynamic interface-based collection iteration (`IEnumerable<ICommand>`) executing a non-blocking `FirstOrDefault` query, checking contextual capability via `CanExecute()` rulesets.
+*   Implements the **Strategy Pattern** for decoupled scalability.
+*   Maintains an isolated, interface-driven collection (`IEnumerable<ICommand>`) to dynamically select and execute the appropriate command handler based on user input.
 
-### 3. Single-Responsibility Engine (`PriceCommand.cs`)
-*   An ultra-scalable, single-class price evaluation engine. 
-*   Leverages highly efficient C# **Pattern Matching** switches to translate interface markup identifiers directly into physical stock exchange symbols (`BTCUSDT`, `ETHUSDT`, `TONUSDT`).
-*   Utilizes `IHttpClientFactory` for managed connection pooling, drastically minimizing socket exhaustion under high concurrent load.
-
----
-
-## 📋 INTERFACE & USER WORKFLOW
-*   `/start` - Initializes the execution sequence, generating native, hardware-optimized responsive `ReplyKeyboardMarkup` blocks for mobile and desktop screens.
-*   `🪙 Bitcoin` / `🔷 Ethereum` / `💎 Toncoin` - Dispatches instantaneous, self-editing HTTP visual components directly updating specific Telegram thread message indexes, preventing chat clutter.
+### 3. Market Data Engine (`PriceCommand.cs`)
+*   Handles real-time price evaluation using C# pattern matching to map user requests to exchange symbols (`BTCUSDT`, `ETHUSDT`, `TONUSDT`).
+*   Utilizes `IHttpClientFactory` for managed connection pooling, preventing socket exhaustion under high concurrent loads.
 
 ---
 
-## 💻 INDUSTRIAL DEPLOYMENT & CONSOLE STARTUP
+## 📋 Interface & User Workflow
+
+*   `/start` - Initializes the execution sequence and deploys responsive `ReplyKeyboardMarkup` layouts for mobile and desktop screens.
+*   `🪙 Bitcoin` / `🔷 Ethereum` / `💎 Toncoin` - Fetches the latest tickers from Binance and dispatches instant text updates back to the user chat.
+
+---
+
+## 💻 Deployment & Local Quickstart
 
 ### Step 1: Clone & Configure Token
-Clone the codebase. Open your environment variables configuration space (`appsettings.json`) and safely mount your secure network authentication hash:
+Clone the repository and inject your secure API credentials into the `appsettings.json` configuration file:
+
 ```json
 {
   "TelegramBot": {
@@ -51,13 +52,15 @@ Clone the codebase. Open your environment variables configuration space (`appset
 ```
 
 ### Step 2: Compile & Execute Locally
-Restore system dependencies and spin up the non-blocking worker thread:
+Restore NuGet dependencies and launch the background worker service:
+
 ```bash
 dotnet run
 ```
 
-### Step 3: Enterprise Cloud Deployment (Docker)
-Build a minimal, secure multi-stage Linux runtime environment executing the isolated bot service:
+### Step 3: Containerized Deployment (Docker)
+Build and run a minimal, production-ready Linux runtime container:
+
 ```bash
 docker build -t crypto-bot-service .
 docker run -d --name live-crypto-bot crypto-bot-service
