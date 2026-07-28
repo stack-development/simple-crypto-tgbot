@@ -10,6 +10,7 @@ A high-performance, asynchronous Telegram Bot engineered with C# (.NET 8) and in
 *   **API Wrapper:** Telegram.Bot Framework (Asynchronous long-polling orchestration)
 *   **External Integration:** Binance REST API v3 (Market data endpoints)
 *   **Containerization:** Docker (Multi-stage lightweight execution environments)
+*   **Containerization:** Docker & Docker Compose (Multi-stage lightweight environments)
 
 ---
 
@@ -58,10 +59,10 @@ Restore NuGet dependencies and launch the background worker service:
 dotnet run
 ```
 
-### Step 3: Containerized Deployment (Docker)
-Build and run a minimal, production-ready Linux runtime container:
+### Step 3: Enterprise Cloud Deployment (Docker Compose)
+
+The automated way to spin up the containerized bot service in the background:
 
 ```bash
-docker build -t crypto-bot-service .
-docker run -d --name live-crypto-bot crypto-bot-service
+docker compose up --build -d
 ```
